@@ -16,7 +16,7 @@ describe('object operations', () => {
      * - Attach the response to the data variable defined above
      */
     const params = {
-      uri: url.format({/* TODO: */}),
+      uri: 'https://api.coindesk.com/v1/bpi/historical/close.json?start=2019-01-01&end=2019-01-31',
       json: true
     }
 
@@ -44,7 +44,14 @@ describe('object operations', () => {
      * Extract only the results from Mondays
      * See expected result below
      */
-    const actual = null // TODO:
+    const actual = Object.keys(data)
+                    .filter(date => (new Date(date).getDay() == 2))
+                    .reduce((collection, date) => {
+                      return {
+                        ...collection,
+                        [date]: data[date]
+                      }
+                    }, {})
     const expected = {
       '2019-01-01': 3869.47,
       '2019-01-08': 4029.9917,
@@ -62,7 +69,7 @@ describe('object operations', () => {
      * Find the top value (Number) from any date
      * See expected result below
      */
-    const actual = null // TODO:
+    const actual = Object.keys(data).reduce((result, date) => Math.max(result, data[date]), 0)
     const expected = 4083.165
     assert.equal(actual, expected)
   })
@@ -74,7 +81,15 @@ describe('object operations', () => {
      * Return the top 5 dates in descending order
      * See expected result below
      */
-    const actual = null // TODO:
+    const actual = Object.keys(data)
+                    .sort((a, b) => data[b] - data[a])
+                    .slice(0, 5)
+                    .reduce((collection, date) => {
+                      return {
+                        ...collection,
+                        [date]: data[date]
+                      }
+                    }, {});
     const expected = {
       '2019-01-06': 4083.165,
       '2019-01-07': 4041.4583,
